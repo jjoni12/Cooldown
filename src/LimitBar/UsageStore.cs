@@ -14,9 +14,10 @@ namespace LimitBar
         static readonly TimeSpan AfterReset = TimeSpan.FromSeconds(30);
         // The Claude endpoint answers 429 when asked too often.
         static readonly TimeSpan MinGap = TimeSpan.FromSeconds(30);
-        // After a 429 a service is left alone this long (or as long as it asks), doubling on each
-        // further 429 so a short refresh interval doesn't keep running into the limit.
+        // After a 429 a service is left alone this long (or as long as it asks); longer if it keeps
+        // answering 429, so a 1-minute refresh interval doesn't run into the limit every time.
         static readonly TimeSpan RateLimitPause = TimeSpan.FromMinutes(1);
+        static readonly TimeSpan RepeatedRateLimitPause = TimeSpan.FromMinutes(2);
 
         readonly IUsageProvider[] _providers;
         readonly Dictionary<string, ServiceUsage> _latest = new Dictionary<string, ServiceUsage>();
@@ -144,7 +145,7 @@ namespace LimitBar
             {
                 var inRow = _limitedInRow.TryGetValue(provider.Id, out var n) ? n + 1 : 1;
                 _limitedInRow[provider.Id] = inRow;
-                var pause = TimeSpan.FromTicks(Math.Min(ErrorBackoff.Ticks, RateLimitPause.Ticks << Math.Min(inRow - 1, 10)));
+                var pause = inRow == 1 ? RateLimitPause : RepeatedRateLimitPause;
                 if (ex.RetryAfter > pause) pause = ex.RetryAfter.Value;
                 var until = DateTimeOffset.Now + pause;
                 if (_pausedUntil.TryGetValue(provider.Id, out var earlier) && earlier > until) until = earlier;

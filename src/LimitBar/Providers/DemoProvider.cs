@@ -22,7 +22,8 @@ namespace LimitBar.Providers
         {
             new DemoProvider("claude", "Claude",
                 ("5h", TimeSpan.FromHours(5), 78, new TimeSpan(2, 14, 0), false),
-                ("1w", TimeSpan.FromDays(7), 41, new TimeSpan(4, 6, 0, 0), false)),
+                ("1w", TimeSpan.FromDays(7), 41, new TimeSpan(4, 6, 0, 0), false),
+                ("1w|Fable", TimeSpan.FromDays(7), 18, new TimeSpan(4, 6, 0, 0), false)),
             new DemoProvider("gpt", "GPT",
                 ("5h", TimeSpan.FromHours(5), 23, new TimeSpan(3, 40, 0), false),
                 ("1w", TimeSpan.FromDays(7), 93, new TimeSpan(1, 2, 0, 0), false)),
