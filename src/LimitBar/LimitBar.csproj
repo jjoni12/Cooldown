@@ -10,7 +10,7 @@
     <AssemblyName>LimitBar</AssemblyName>
     <RootNamespace>LimitBar</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Product>LimitBar</Product>
     <Description>AI coding tool usage limits on the Windows taskbar.</Description>
   </PropertyGroup>
