@@ -49,8 +49,35 @@ namespace LimitBar.Providers
 
             var root = Json.Parse(body);
             var usage = new ServiceUsage { Id = Id, Name = Name };
-            AddWindow(usage, root, "five_hour", TimeSpan.FromHours(5));
-            AddWindow(usage, root, "seven_day", TimeSpan.FromDays(7));
+            // "limits" also lists weekly limits for single models, which the older fields leave out.
+            foreach (var limit in Json.Arr(Json.Get(root, "limits")))
+            {
+                var percent = Json.Num(Json.Get(limit, "percent"));
+                if (!percent.HasValue) continue;
+                string label;
+                switch (Json.Str(Json.Get(limit, "kind")))
+                {
+                    case "session": label = "5h"; break;
+                    case "weekly_all": label = "1w"; break;
+                    case "weekly_scoped":
+                        var model = Json.Str(Json.Get(limit, "scope", "model", "display_name"));
+                        label = string.IsNullOrEmpty(model) ? "1w" : "1w|" + model;
+                        break;
+                    default: continue;
+                }
+                usage.Windows.Add(new UsageWindow
+                {
+                    Label = label,
+                    Length = label == "5h" ? TimeSpan.FromHours(5) : TimeSpan.FromDays(7),
+                    UsedPercent = percent.Value,
+                    ResetsAt = Json.Time(Json.Get(limit, "resets_at")),
+                });
+            }
+            if (usage.Windows.Count == 0)
+            {
+                AddWindow(usage, root, "five_hour", TimeSpan.FromHours(5));
+                AddWindow(usage, root, "seven_day", TimeSpan.FromDays(7));
+            }
             return usage;
         }
 

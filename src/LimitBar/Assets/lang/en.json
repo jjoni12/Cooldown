@@ -31,6 +31,7 @@
   "CopilotPremium": "Premium",
   "CopilotChat": "Chat",
   "CopilotCompletions": "Completions",
+  "CopilotCredits": "AI credits",
   "ServerError": "{0} server error ({1})",
   "RateLimited": "Too many requests to {0} (429). Trying again shortly",
   "CommandTimedOut": "The {0} command didn't finish in time",

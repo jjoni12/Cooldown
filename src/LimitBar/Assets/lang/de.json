@@ -31,6 +31,7 @@
   "CopilotPremium": "Premium",
   "CopilotChat": "Chat",
   "CopilotCompletions": "Vervollständigung",
+  "CopilotCredits": "KI-Credits",
   "ServerError": "Serverfehler bei {0} ({1})",
   "RateLimited": "Zu viele Anfragen an {0} (429). Neuer Versuch in Kürze",
   "CommandTimedOut": "Der {0}-Befehl wurde nicht rechtzeitig beendet",

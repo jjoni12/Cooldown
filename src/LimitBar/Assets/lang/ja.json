@@ -31,6 +31,7 @@
   "CopilotPremium": "プレミアム",
   "CopilotChat": "チャット",
   "CopilotCompletions": "コード補完",
+  "CopilotCredits": "AI クレジット",
   "ServerError": "{0} のサーバー エラー ({1})",
   "RateLimited": "{0} へのリクエストが多すぎます (429)。まもなく再試行します",
   "CommandTimedOut": "{0} のコマンドが時間内に終了しませんでした",

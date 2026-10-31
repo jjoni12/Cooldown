@@ -58,7 +58,8 @@ namespace LimitBar.Providers
 
                 usage.Windows.Add(new UsageWindow
                 {
-                    Label = label,
+                    // Since June 2026 paid plans spend AI credits instead of premium requests.
+                    Label = label == Text.PremiumLabel && Json.Get(root, "token_based_billing") is true ? Text.CreditsLabel : label,
                     Length = UsageWindow.MonthEndingAt(resetsAt),
                     UsedPercent = Math.Max(0, Math.Min(100, 100 - remaining.Value)),
                     ResetsAt = resetsAt,

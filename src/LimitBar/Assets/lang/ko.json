@@ -31,6 +31,7 @@
   "CopilotPremium": "프리미엄",
   "CopilotChat": "채팅",
   "CopilotCompletions": "자동완성",
+  "CopilotCredits": "AI 크레딧",
   "ServerError": "{0} 서버 오류 ({1})",
   "RateLimited": "{0} 요청이 너무 많아요 (429). 곧 다시 불러올게요",
   "CommandTimedOut": "{0} 명령이 시간 안에 끝나지 않았어요",
