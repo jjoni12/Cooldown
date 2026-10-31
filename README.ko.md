@@ -23,6 +23,7 @@ AI 코딩 도구 사용 한도를 윈도우 11 작업 표시줄에서 바로 확
 | Cursor | 주간 또는 월간 (플랜에 따라) | Cursor 앱 로그인 |
 | GitHub Copilot | 월간 | [GitHub CLI](https://cli.github.com) 로그인 (`gh auth login`) |
 | Antigravity | 5시간, 주간 | Antigravity CLI(`agy` 1.1.11 이상) 로그인 |
+| Grok | 주간 (Grok 서비스들이 같이 쓰는 SuperGrok 사용량) | xAI Grok Build CLI 로그인 (`grok login`, SuperGrok 또는 X Premium+) |
 | OpenCode Go | 5시간, 주간, 월간 | [OpenCode](https://opencode.ai)에서 콘솔 로그인 또는 Go API 키 등록 |
 
 PC에서 찾은 서비스가 먼저 표시되고, 나머지는 **설정**에서 켜고 끌 수 있습니다.
@@ -58,6 +59,7 @@ LimitBar에는 계정이 없고 비밀번호를 묻지 않습니다. 각 도구�
 | Cursor | Cursor에 저장된 로그인(읽기 전용) → `cursor.com/api/usage-summary` (cursor.com 대시보드가 묻는 방식 그대로) |
 | GitHub Copilot | `gh api /copilot_internal/user`. 요청은 GitHub CLI가 보내서 LimitBar는 GitHub 토큰을 다루지 않습니다 |
 | Antigravity | 공식 명령 `agy -p /usage` |
+| Grok | Grok Build CLI에 저장된 로그인(`~/.grok/auth.json`, 읽기 전용) → `cli-chat-proxy.grok.com/v1/billing` (Grok CLI가 묻는 방식 그대로). 로그인은 약 일주일 유지되고 `grok` CLI만 갱신합니다 |
 | OpenCode Go | OpenCode에 저장된 로그인 → `opencode.ai/zen/go/v1/usage` (OpenCode 자체 클라이언트가 묻는 방식 그대로) |
 
 Antigravity 명령을 빼면 공개 문서가 있는 API가 아니라서 서비스 쪽에서 예고 없이 바꿀 수 있습니다. 하나가 막혀도 그 서비스만 오류가 나고 나머지는 그대로 동작합니다.
@@ -132,4 +134,4 @@ dotnet build src/LimitBar -c Release
 
 ## 라이선스
 
-[MIT](LICENSE). Claude, GPT, Codex, Cursor, GitHub Copilot, Antigravity, Gemini, OpenCode는 각 소유자의 상표이며, 로고는 [LobeHub Icons](https://github.com/lobehub/lobe-icons)에서 가져와 서비스 식별용으로만 씁니다. LimitBar는 이들과 관계가 없습니다.
+[MIT](LICENSE). Claude, GPT, Codex, Cursor, GitHub Copilot, Antigravity, Gemini, Grok, OpenCode는 각 소유자의 상표이며, 로고는 [LobeHub Icons](https://github.com/lobehub/lobe-icons)에서 가져와 서비스 식별용으로만 씁니다. LimitBar는 이들과 관계가 없습니다.

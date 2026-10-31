@@ -23,6 +23,7 @@ See how much of your AI coding limits you've used, right on the Windows 11 taskb
 | Cursor | Weekly or monthly, by plan | Signed in to the Cursor app |
 | GitHub Copilot | Monthly | Signed in to [GitHub CLI](https://cli.github.com) (`gh auth login`) |
 | Antigravity | 5-hour, weekly | Signed in to the Antigravity CLI (`agy` 1.1.11+) |
+| Grok | Weekly (the SuperGrok pool shared by Grok's products) | Signed in to xAI's Grok Build CLI (`grok login`; SuperGrok or X Premium+) |
 | OpenCode Go | 5-hour, weekly, monthly | [OpenCode](https://opencode.ai) with a Console sign-in or Go API key |
 
 LimitBar shows the services it finds on your PC; turn others on or off in **Settings**.
@@ -58,6 +59,7 @@ LimitBar has no account and never asks for a password. It reads the sign-in that
 | Cursor | Cursor's saved sign-in (read-only) → `cursor.com/api/usage-summary`, as the cursor.com dashboard asks it |
 | GitHub Copilot | `gh api /copilot_internal/user`; the GitHub CLI signs the request, so LimitBar never handles your GitHub token |
 | Antigravity | The official `agy -p /usage` command |
+| Grok | Grok Build CLI's sign-in (`~/.grok/auth.json`, read-only) → `cli-chat-proxy.grok.com/v1/billing`, as the Grok CLI asks it. The sign-in lasts about a week and only the `grok` CLI renews it |
 | OpenCode Go | OpenCode's saved sign-in → `opencode.ai/zen/go/v1/usage`, as OpenCode's own client asks it |
 
 Apart from Antigravity's command, these aren't documented public APIs, so a service may change them without notice. If one stops working, only that service shows an error.
@@ -132,4 +134,4 @@ Set the environment variable `LIMITBAR_DEMO=1` to run it with sample numbers ins
 
 ## License
 
-[MIT](LICENSE). Claude, GPT, Codex, Cursor, GitHub Copilot, Antigravity, Gemini and OpenCode are trademarks of their respective owners; logos come from [LobeHub Icons](https://github.com/lobehub/lobe-icons) and are used only to identify each service. LimitBar isn't affiliated with any of them.
+[MIT](LICENSE). Claude, GPT, Codex, Cursor, GitHub Copilot, Antigravity, Gemini, Grok and OpenCode are trademarks of their respective owners; logos come from [LobeHub Icons](https://github.com/lobehub/lobe-icons) and are used only to identify each service. LimitBar isn't affiliated with any of them.

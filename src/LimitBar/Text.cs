@@ -98,6 +98,9 @@ namespace LimitBar
         public static string OpenCodeKeyRejected => Get(nameof(OpenCodeKeyRejected));
         public static string OpenCodeSessionExpired => Get(nameof(OpenCodeSessionExpired));
         public static string OpenCodeNoGo => Get(nameof(OpenCodeNoGo));
+        public static string GrokSignIn => Get(nameof(GrokSignIn));
+        public static string GrokExpired => Get(nameof(GrokExpired));
+        public static string GrokNoPercent => Get(nameof(GrokNoPercent));
         public static string NoLimits => Get(nameof(NoLimits));
         public static string LimitsUnavailable => Get(nameof(LimitsUnavailable));
 

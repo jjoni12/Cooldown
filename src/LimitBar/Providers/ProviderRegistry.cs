@@ -15,6 +15,7 @@ namespace LimitBar.Providers
                 new CursorProvider(),
                 new CopilotProvider(),
                 new AntigravityProvider(),
+                new GrokProvider(),
                 new OpenCodeProvider(),
             };
             var ids = new HashSet<string>(builtIn.Select(p => p.Id));
