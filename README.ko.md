@@ -13,7 +13,6 @@ AI 코딩 도구 사용 한도를 윈도우 11 작업 표시줄에서 바로 확
 - **색으로 한눈에** — 파랑, 70%부터 노랑, 90%부터 빨강
 - **누르면 자세히** — 모든 한도와 설정이 담긴 패널
 - **윈도우처럼** — 다크·라이트 모드를 따르고 작업 표시줄과 같은 글꼴을 씁니다. 10개 언어 지원
-- **가볍게** — 메모리 10–20 MB 정도, GPU를 쓰지 않고, PC가 잠겨 있으면 조회를 멈춥니다
 
 ## 지원 서비스
 
@@ -21,7 +20,7 @@ AI 코딩 도구 사용 한도를 윈도우 11 작업 표시줄에서 바로 확
 |---|---|---|
 | Claude | 5시간, 주간 | [Claude Code](https://code.claude.com) 로그인 |
 | GPT (Codex) | 5시간, 주간 | [Codex CLI](https://github.com/openai/codex) 로그인 |
-| Cursor | 결제 주기(월) | Cursor 앱 로그인 |
+| Cursor | 주간 또는 월간 (플랜에 따라) | Cursor 앱 로그인 |
 | GitHub Copilot | 월간 | [GitHub CLI](https://cli.github.com) 로그인 (`gh auth login`) |
 | Antigravity | 5시간, 주간 | Antigravity CLI(`agy` 1.1.11 이상) 로그인 |
 | OpenCode Go | 5시간, 주간, 월간 | [OpenCode](https://opencode.ai)에서 콘솔 로그인 또는 Go API 키 등록 |
@@ -121,7 +120,7 @@ LimitBar를 고치지 않고도 어떤 도구든 추가할 수 있습니다. 한
 dotnet build src/LimitBar -c Release
 ```
 
-C# / WPF로 만들었습니다. 기본 서비스를 추가하려면 `src/LimitBar/Providers/`에 `IUsageProvider`를 구현하고, 로고를 `Assets/logos/`에 넣고, `ProviderRegistry.cs`에 등록하면 됩니다.
+환경 변수 `LIMITBAR_DEMO=1`로 실행하면 실제 계정 대신 예시 숫자로 동작합니다. C# / WPF로 만들었습니다. 기본 서비스를 추가하려면 `src/LimitBar/Providers/`에 `IUsageProvider`를 구현하고, 로고를 `Assets/logos/`에 넣고, `ProviderRegistry.cs`에 등록하면 됩니다.
 
 ## 자주 묻는 질문
 

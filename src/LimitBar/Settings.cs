@@ -26,7 +26,7 @@ namespace LimitBar
 
         static Settings() => Load();
 
-        public static bool IsShown(string serviceId) => !Hidden.Contains(serviceId);
+        public static bool IsShown(string serviceId) => Providers.DemoProvider.On || !Hidden.Contains(serviceId);
 
         // A service seen for the first time starts out shown only if this PC is set up for it.
         public static void Introduce(IReadOnlyList<IUsageProvider> providers)

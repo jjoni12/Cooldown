@@ -7,6 +7,7 @@ namespace LimitBar.Providers
     {
         public static IUsageProvider[] Create()
         {
+            if (DemoProvider.On) return DemoProvider.All();
             var builtIn = new List<IUsageProvider>
             {
                 new ClaudeProvider(),

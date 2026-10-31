@@ -44,11 +44,13 @@ namespace LimitBar.Providers
 
             var start = Json.Time(Json.Get(root, "billingCycleStart"));
             var end = Json.Time(Json.Get(root, "billingCycleEnd"));
+            var length = start.HasValue && end > start ? end.Value - start.Value : UsageWindow.MonthEndingAt(end);
             var usage = new ServiceUsage { Id = Id, Name = Name };
             usage.Windows.Add(new UsageWindow
             {
-                Label = Text.MonthLabel,
-                Length = start.HasValue && end > start ? end.Value - start.Value : UsageWindow.MonthEndingAt(end),
+                // Newer plans refill a weekly pool; older and free plans a monthly one.
+                Label = length.TotalDays < 10 ? "1w" : Text.MonthLabel,
+                Length = length,
                 UsedPercent = Math.Max(0, Math.Min(100, used.Value)),
                 ResetsAt = end,
                 FixedReset = true,

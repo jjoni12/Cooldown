@@ -13,7 +13,6 @@ See how much of your AI coding limits you've used, right on the Windows 11 taskb
 - **Color at a glance** — blue, yellow from 70%, red from 90%
 - **Details on click** — a panel with every limit, plus settings
 - **Fits in** — follows dark and light mode and uses the taskbar's font; 10 languages
-- **Lightweight** — about 10–20 MB of memory, no GPU, and it stops checking while your PC is locked
 
 ## Supported services
 
@@ -21,7 +20,7 @@ See how much of your AI coding limits you've used, right on the Windows 11 taskb
 |---|---|---|
 | Claude | 5-hour, weekly | Signed in to [Claude Code](https://code.claude.com) |
 | GPT (Codex) | 5-hour, weekly | Signed in to [Codex CLI](https://github.com/openai/codex) |
-| Cursor | Billing month | Signed in to the Cursor app |
+| Cursor | Weekly or monthly, by plan | Signed in to the Cursor app |
 | GitHub Copilot | Monthly | Signed in to [GitHub CLI](https://cli.github.com) (`gh auth login`) |
 | Antigravity | 5-hour, weekly | Signed in to the Antigravity CLI (`agy` 1.1.11+) |
 | OpenCode Go | 5-hour, weekly, monthly | [OpenCode](https://opencode.ai) with a Console sign-in or Go API key |
@@ -121,7 +120,7 @@ With the [.NET SDK](https://dotnet.microsoft.com/download) installed:
 dotnet build src/LimitBar -c Release
 ```
 
-The app is written in C# / WPF. To add a built-in service, implement `IUsageProvider` in `src/LimitBar/Providers/`, add its logo to `Assets/logos/`, and list it in `ProviderRegistry.cs`.
+Set the environment variable `LIMITBAR_DEMO=1` to run it with sample numbers instead of your accounts. The app is written in C# / WPF. To add a built-in service, implement `IUsageProvider` in `src/LimitBar/Providers/`, add its logo to `Assets/logos/`, and list it in `ProviderRegistry.cs`.
 
 ## FAQ
 
