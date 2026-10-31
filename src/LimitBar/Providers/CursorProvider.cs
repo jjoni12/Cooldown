@@ -42,9 +42,7 @@ namespace LimitBar.Providers
             if (weekly != null) return new ServiceUsage { Id = Id, Name = Name, Windows = { weekly } };
 
             var root = Json.Parse(body);
-            var used = Json.Num(Json.Get(root, "individualUsage", "plan", "totalPercentUsed"))
-                ?? PercentFromMessage(Json.Str(Json.Get(root, "autoModelSelectedDisplayMessage")))
-                ?? PercentFromMessage(Json.Str(Json.Get(root, "namedModelSelectedDisplayMessage")));
+            var used = PlanPercent(root);
             if (!used.HasValue) throw new UsageException(Json.Get(root, "isUnlimited") is true ? Text.NoLimits : Text.FetchFailed);
 
             var start = Json.Time(Json.Get(root, "billingCycleStart"));
@@ -59,6 +57,29 @@ namespace LimitBar.Providers
                 FixedReset = true,
             });
             return usage;
+        }
+
+        // Individual plans report totalPercentUsed. Team and enterprise seats may only have a used/limit
+        // pair (in cents) for the plan, the member's own cap or the team's shared pool, in that order.
+        static double? PlanPercent(object root)
+        {
+            var plan = Json.Get(root, "individualUsage", "plan");
+            var auto = Json.Num(Json.Get(plan, "autoPercentUsed"));
+            var api = Json.Num(Json.Get(plan, "apiPercentUsed"));
+            return Json.Num(Json.Get(plan, "totalPercentUsed"))
+                ?? (auto.HasValue && api.HasValue ? (auto + api) / 2 : api ?? auto)
+                ?? Ratio(plan)
+                ?? Ratio(Json.Get(root, "individualUsage", "overall"))
+                ?? Ratio(Json.Get(root, "teamUsage", "pooled"))
+                ?? PercentFromMessage(Json.Str(Json.Get(root, "autoModelSelectedDisplayMessage")))
+                ?? PercentFromMessage(Json.Str(Json.Get(root, "namedModelSelectedDisplayMessage")));
+        }
+
+        static double? Ratio(object pair)
+        {
+            var used = Json.Num(Json.Get(pair, "used"));
+            var limit = Json.Num(Json.Get(pair, "limit"));
+            return limit > 0 && used.HasValue ? used / limit * 100 : null;
         }
 
         // The unified Cursor + Grok plans spend one weekly pool, reported apart from the monthly billing cycle.

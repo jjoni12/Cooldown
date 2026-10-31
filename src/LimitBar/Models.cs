@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,6 +33,16 @@ namespace LimitBar
         public List<UsageWindow> Windows = new List<UsageWindow>();
         public string Error;
         public DateTimeOffset? FetchedAt;
+
+        /// <summary>The two bars on the taskbar, shortest first; model-specific limits ("1w|Fable") only when nothing else is reported.</summary>
+        public List<UsageWindow> ChipWindows
+        {
+            get
+            {
+                var main = Windows.Where(w => w.Label.IndexOf('|') < 0).ToList();
+                return (main.Count > 0 ? main : Windows).OrderBy(w => w.Length).Take(2).ToList();
+            }
+        }
 
         public static ServiceUsage Empty(IUsageProvider p) => new ServiceUsage { Id = p.Id, Name = p.Name };
     }

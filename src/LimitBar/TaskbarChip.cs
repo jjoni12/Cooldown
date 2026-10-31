@@ -171,8 +171,7 @@ namespace LimitBar
         }
 
         static string Describe(ServiceUsage usage) =>
-            usage.Id + ";" + usage.Name + ";" + usage.Error + ";" + string.Join(",", usage.Windows.OrderBy(w => w.Length).Take(2)
-                .Select(w => $"{Math.Round(w.EffectivePercent, 1)}/{w.TimeText}/{w.IsIdle}"));
+            usage.Id + ";" + usage.Name + ";" + usage.Error + ";" + string.Join(",", usage.ChipWindows.Select(w => $"{Math.Round(w.EffectivePercent, 1)}/{w.TimeText}/{w.IsIdle}"));
 
         static FrameworkElement BuildService(ServiceUsage usage, Palette palette, double leftMargin)
         {
@@ -194,7 +193,7 @@ namespace LimitBar
             Grid.SetRowSpan(logo, 2);
             grid.Children.Add(logo);
 
-            var windows = usage.Windows.OrderBy(w => w.Length).Take(2).ToList();
+            var windows = usage.ChipWindows;
             if (windows.Count == 0)
             {
                 AddRow(grid, 0, 2, 0, "—", palette.TextSecondary, palette);

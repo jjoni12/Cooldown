@@ -92,6 +92,7 @@ namespace LimitBar
         public static string GhMissing => Get(nameof(GhMissing));
         public static string GhSignIn => Get(nameof(GhSignIn));
         public static string CopilotNone => Get(nameof(CopilotNone));
+        public static string CopilotEnded => Get(nameof(CopilotEnded));
         public static string CursorSignIn => Get(nameof(CursorSignIn));
         public static string OpenCodeSignIn => Get(nameof(OpenCodeSignIn));
         public static string OpenCodeKeyRejected => Get(nameof(OpenCodeKeyRejected));
@@ -114,9 +115,12 @@ namespace LimitBar
         public const string PremiumLabel = "premium";
         public const string ChatLabel = "chat";
         public const string CompletionsLabel = "completions";
+        public const string CreditsLabel = "credits";
 
         public static string CopilotCreditsUsed(double credits) =>
             Format(nameof(CopilotCreditsUsed), credits.ToString("0.#", CultureInfo.CurrentCulture));
+        public static string CodexCreditsLeft(double credits) =>
+            Format(nameof(CodexCreditsLeft), credits.ToString("0.#", CultureInfo.CurrentCulture));
 
         public static string WindowName(string label)
         {
@@ -130,6 +134,7 @@ namespace LimitBar
                 case PremiumLabel: return Get("CopilotPremium");
                 case ChatLabel: return Get("CopilotChat");
                 case CompletionsLabel: return Get("CopilotCompletions");
+                case CreditsLabel: return Get("CreditLimit");
             }
             var match = Regex.Match(label, @"^(\d+)([dhm])$");
             if (!match.Success) return label;

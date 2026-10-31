@@ -18,8 +18,8 @@ See how much of your AI coding limits you've used, right on the Windows 11 taskb
 
 | Service | Limits shown | What you need |
 |---|---|---|
-| Claude | 5-hour, weekly | Signed in to [Claude Code](https://code.claude.com) |
-| GPT (Codex) | 5-hour, weekly | Signed in to [Codex CLI](https://github.com/openai/codex) |
+| Claude | 5-hour, weekly, per-model weekly | Signed in to [Claude Code](https://code.claude.com) (a paid plan; Free has no Claude Code) |
+| GPT (Codex) | 5-hour, weekly (30 days on Free), plus Spark and workspace credit caps | Signed in to [Codex CLI](https://github.com/openai/codex) |
 | Cursor | Weekly or monthly, by plan | Signed in to the Cursor app |
 | GitHub Copilot | Monthly | Signed in to [GitHub CLI](https://cli.github.com) (`gh auth login`) |
 | Antigravity | 5-hour, weekly | Signed in to the Antigravity CLI (`agy` 1.1.11+) |
