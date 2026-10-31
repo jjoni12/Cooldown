@@ -20,25 +20,17 @@ namespace LimitBar
             return client;
         }
 
-        static readonly TimeSpan DefaultRetryWait = TimeSpan.FromSeconds(5);
-        static readonly TimeSpan MaxRetryWait = TimeSpan.FromSeconds(30);
-
         public static Task<(int Status, string Body)> GetAsync(string url, IDictionary<string, string> headers, CancellationToken ct) =>
             RequestAsync(HttpMethod.Get, url, headers, null, ct);
 
         public static Task<(int Status, string Body)> PostJsonAsync(string url, IDictionary<string, string> headers, string json, CancellationToken ct) =>
             RequestAsync(HttpMethod.Post, url, headers, json, ct);
 
+        // A 429 is never retried here: asking again right away only keeps the limit in place. The store pauses the service.
         static async Task<(int Status, string Body)> RequestAsync(HttpMethod method, string url, IDictionary<string, string> headers, string json, CancellationToken ct)
         {
             var (status, body, retryAfter) = await SendAsync(method, url, headers, json, ct).ConfigureAwait(false);
-            if (status != 429) return (status, body);
-
-            var wait = retryAfter ?? DefaultRetryWait;
-            if (wait < TimeSpan.FromSeconds(1)) wait = TimeSpan.FromSeconds(1);
-            if (wait > MaxRetryWait) wait = MaxRetryWait;
-            await Task.Delay(wait, ct).ConfigureAwait(false);
-            (status, body, _) = await SendAsync(method, url, headers, json, ct).ConfigureAwait(false);
+            if (status == 429) throw new RateLimitedException(retryAfter);
             return (status, body);
         }
 

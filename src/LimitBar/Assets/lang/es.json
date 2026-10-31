@@ -33,7 +33,7 @@
   "CopilotCompletions": "Autocompletado",
   "CopilotCreditsUsed": "{0} créditos de IA usados este mes. GitHub no indica el límite del plan",
   "ServerError": "Error del servidor de {0} ({1})",
-  "RateLimited": "Demasiadas solicitudes a {0} (429). Se volverá a intentar en breve",
+  "RateLimited": "Demasiadas solicitudes a {0} (429). Se volverá a intentar a las {1}",
   "CommandTimedOut": "El comando de {0} no terminó a tiempo",
   "CommandBadOutput": "No se pudo leer la salida del comando de {0}",
   "Window5h": "5 horas",

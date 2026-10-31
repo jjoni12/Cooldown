@@ -48,11 +48,16 @@ namespace LimitBar
 
     public sealed class UsageException : Exception
     {
-        public UsageException(string message, bool rateLimited = false) : base(message) => RateLimited = rateLimited;
+        public UsageException(string message) : base(message) { }
 
-        public bool RateLimited { get; }
+        public static UsageException Server(string service, int status) => new UsageException(Text.ServerError(service, status));
+    }
 
-        public static UsageException Server(string service, int status) =>
-            status == 429 ? new UsageException(Text.RateLimited(service), rateLimited: true) : new UsageException(Text.ServerError(service, status));
+    /// <summary>The service answered 429; RetryAfter is how long it asked us to wait, if it said.</summary>
+    public sealed class RateLimitedException : Exception
+    {
+        public RateLimitedException(TimeSpan? retryAfter) : base("429") => RetryAfter = retryAfter;
+
+        public TimeSpan? RetryAfter { get; }
     }
 }

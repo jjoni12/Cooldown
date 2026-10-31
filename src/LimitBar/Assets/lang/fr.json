@@ -33,7 +33,7 @@
   "CopilotCompletions": "Complétions",
   "CopilotCreditsUsed": "{0} crédits IA utilisés ce mois-ci. GitHub n’indique pas la limite du forfait",
   "ServerError": "Erreur du serveur {0} ({1})",
-  "RateLimited": "Trop de requêtes vers {0} (429). Nouvelle tentative sous peu",
+  "RateLimited": "Trop de requêtes vers {0} (429). Nouvelle tentative à {1}",
   "CommandTimedOut": "La commande {0} ne s’est pas terminée à temps",
   "CommandBadOutput": "Impossible de lire la sortie de la commande {0}",
   "Window5h": "5 heures",
