@@ -1,10 +1,10 @@
-# LimitBar
+# Cooldown
 
 **English** · [한국어](README.ko.md)
 
-See how much of your AI coding limits you've used, right on the Windows 11 taskbar.
+See how much of your AI coding limits you've used, right on the Windows 11 taskbar. Formerly LimitBar.
 
-![LimitBar on the taskbar with its panel open](docs/screenshot.png)
+![Cooldown on the taskbar with its panel open](docs/screenshot.png)
 
 ## Features
 
@@ -26,18 +26,20 @@ See how much of your AI coding limits you've used, right on the Windows 11 taskb
 | Grok | Weekly (the SuperGrok pool shared by Grok's products) | Signed in to xAI's Grok Build CLI (`grok login`; SuperGrok or X Premium+) |
 | OpenCode Go | 5-hour, weekly, monthly | [OpenCode](https://opencode.ai) with a Console sign-in or Go API key |
 
-LimitBar shows the services it finds on your PC; turn others on or off in **Settings**.
+Cooldown shows the services it finds on your PC; turn others on or off in **Settings**.
 
 ## Install
 
-1. Download `LimitBar.zip` from [Releases](https://github.com/jjoni12/LimitBar/releases).
-2. Unzip it into a folder you'll keep, such as `%LOCALAPPDATA%\Programs\LimitBar`.
-3. Run `LimitBar.exe`. The app isn't code-signed, so Windows may show a SmartScreen warning the first time: choose **More info → Run anyway**.
+1. Download `Cooldown.zip` from [Releases](https://github.com/jjoni12/Cooldown/releases).
+2. Unzip it into a folder you'll keep, such as `%LOCALAPPDATA%\Programs\Cooldown`.
+3. Run `Cooldown.exe`. The app isn't code-signed, so Windows may show a SmartScreen warning the first time: choose **More info → Run anyway**.
 4. To have it start with Windows, open the panel's **Settings** and turn on **Start with Windows**.
 
 Requires Windows 11. Nothing else to install: it runs on .NET Framework 4.8, which comes with Windows.
 
-To update, quit LimitBar (**Settings → Quit LimitBar**) and unzip the new version over the old one.
+To update, quit Cooldown (**Settings → Quit Cooldown**) and unzip the new version over the old one.
+
+**Coming from LimitBar** (its name before 0.2.0): just run Cooldown. It closes LimitBar, copies its settings and takes over **Start with Windows**; then you can delete the old LimitBar folder.
 
 ## Using it
 
@@ -47,7 +49,7 @@ To update, quit LimitBar (**Settings → Quit LimitBar**) and unzip the new vers
 
 ## Privacy
 
-LimitBar has no account and never asks for a password. It reads the sign-in that each tool has already saved on your PC, and sends it only to that service's own server to ask for your usage. Nothing is stored, logged or sent anywhere else.
+Cooldown has no account and never asks for a password. It reads the sign-in that each tool has already saved on your PC, and sends it only to that service's own server to ask for your usage. Nothing is stored, logged or sent anywhere else.
 
 <details>
 <summary>Where each number comes from</summary>
@@ -57,7 +59,7 @@ LimitBar has no account and never asks for a password. It reads the sign-in that
 | Claude | Claude Code's sign-in → `api.anthropic.com/api/oauth/usage`, the data behind Claude Code's `/usage` |
 | GPT | Codex CLI's sign-in → `chatgpt.com/backend-api/wham/usage`, as the Codex CLI asks it |
 | Cursor | Cursor's saved sign-in (read-only) → `cursor.com/api/usage-summary`, as the cursor.com dashboard asks it |
-| GitHub Copilot | `gh api /copilot_internal/user`; the GitHub CLI signs the request, so LimitBar never handles your GitHub token |
+| GitHub Copilot | `gh api /copilot_internal/user`; the GitHub CLI signs the request, so Cooldown never handles your GitHub token |
 | Antigravity | The official `agy -p /usage` command |
 | Grok | Grok Build CLI's sign-in (`~/.grok/auth.json`, read-only) → `cli-chat-proxy.grok.com/v1/billing`, as the Grok CLI asks it. The sign-in lasts about a week and only the `grok` CLI renews it |
 | OpenCode Go | OpenCode's saved sign-in → `opencode.ai/zen/go/v1/usage`, as OpenCode's own client asks it |
@@ -70,18 +72,18 @@ Apart from Antigravity's command, these aren't documented public APIs, so a serv
 
 ### Languages
 
-English, 한국어, 日本語, 简体中文, 繁體中文, Español, Português (Brasil), Deutsch, Français and Русский are built in. LimitBar follows your Windows display language; choose another in **Settings → Language**.
+English, 한국어, 日本語, 简体中文, 繁體中文, Español, Português (Brasil), Deutsch, Français and Русский are built in. Cooldown follows your Windows display language; choose another in **Settings → Language**.
 
-To add a language, copy [`en.json`](src/LimitBar/Assets/lang/en.json), translate the values (including `LanguageName`), and save it as `%APPDATA%\LimitBar\lang\<code>.json` — for example `it.json`. It then appears in the language list. Pull requests that add languages are welcome.
+To add a language, copy [`en.json`](src/Cooldown/Assets/lang/en.json), translate the values (including `LanguageName`), and save it as `%APPDATA%\Cooldown\lang\<code>.json` — for example `it.json`. It then appears in the language list. Pull requests that add languages are welcome.
 
 ### Your own services
 
-Any tool can be added without changing LimitBar: point it at a command that prints its limits as JSON. See [`examples/`](examples/) for a working sample and the format.
+Any tool can be added without changing Cooldown: point it at a command that prints its limits as JSON. See [`examples/`](examples/) for a working sample and the format.
 
 <details>
 <summary>Format</summary>
 
-List the service in `%APPDATA%\LimitBar\services.json` and restart LimitBar:
+List the service in `%APPDATA%\Cooldown\services.json` and restart Cooldown:
 
 ```json
 [
@@ -89,7 +91,7 @@ List the service in `%APPDATA%\LimitBar\services.json` and restart LimitBar:
     "id": "my-service",
     "name": "My Service",
     "command": "powershell.exe",
-    "arguments": "-NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%\\LimitBar\\my-service.ps1\"",
+    "arguments": "-NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%\\Cooldown\\my-service.ps1\"",
     "timeoutSeconds": 30
   }
 ]
@@ -106,32 +108,32 @@ The command prints:
 }
 ```
 
-`resetsAt` can be an ISO-8601 time or Unix seconds. To show an error instead, print `{ "error": "Please sign in" }`. Add a single-color logo as `%APPDATA%\LimitBar\logos\<id>.svg`.
+`resetsAt` can be an ISO-8601 time or Unix seconds. To show an error instead, print `{ "error": "Please sign in" }`. Add a single-color logo as `%APPDATA%\Cooldown\logos\<id>.svg`.
 
 </details>
 
 ### Logos
 
-Put a single-color SVG named after the service (`claude.svg`, `gpt.svg`, …) in `%APPDATA%\LimitBar\logos\` to replace its logo.
+Put a single-color SVG named after the service (`claude.svg`, `gpt.svg`, …) in `%APPDATA%\Cooldown\logos\` to replace its logo.
 
 ## Build from source
 
 With the [.NET SDK](https://dotnet.microsoft.com/download) installed:
 
 ```
-dotnet build src/LimitBar -c Release
+dotnet build src/Cooldown -c Release
 ```
 
-Set the environment variable `LIMITBAR_DEMO=1` to run it with sample numbers instead of your accounts. The app is written in C# / WPF. To add a built-in service, implement `IUsageProvider` in `src/LimitBar/Providers/`, add its logo to `Assets/logos/`, and list it in `ProviderRegistry.cs`.
+Set the environment variable `COOLDOWN_DEMO=1` to run it with sample numbers instead of your accounts. The app is written in C# / WPF. To add a built-in service, implement `IUsageProvider` in `src/Cooldown/Providers/`, add its logo to `Assets/logos/`, and list it in `ProviderRegistry.cs`.
 
 ## FAQ
 
-**A service says "Sign in to …".** Sign in to that tool's app or CLI; LimitBar picks it up at the next refresh.
+**A service says "Sign in to …".** Sign in to that tool's app or CLI; Cooldown picks it up at the next refresh.
 
 **Does it work on Windows 10?** It hasn't been tested there.
 
-**How does it get into the taskbar?** Windows has no official way to add items to the taskbar, so LimitBar attaches itself to it. A major Windows update could change how that behaves.
+**How does it get into the taskbar?** Windows has no official way to add items to the taskbar, so Cooldown attaches itself to it. A major Windows update could change how that behaves.
 
 ## License
 
-[MIT](LICENSE). Claude, GPT, Codex, Cursor, GitHub Copilot, Antigravity, Gemini, Grok and OpenCode are trademarks of their respective owners; logos come from [LobeHub Icons](https://github.com/lobehub/lobe-icons) and are used only to identify each service. LimitBar isn't affiliated with any of them.
+[MIT](LICENSE). Claude, GPT, Codex, Cursor, GitHub Copilot, Antigravity, Gemini, Grok and OpenCode are trademarks of their respective owners; logos come from [LobeHub Icons](https://github.com/lobehub/lobe-icons) and are used only to identify each service. Cooldown isn't affiliated with any of them.

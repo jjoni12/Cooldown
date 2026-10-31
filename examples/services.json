@@ -3,7 +3,7 @@
     "id": "sample",
     "name": "Sample",
     "command": "powershell.exe",
-    "arguments": "-NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%\\LimitBar\\sample-service.ps1\"",
+    "arguments": "-NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%\\Cooldown\\sample-service.ps1\"",
     "timeoutSeconds": 30
   }
 ]

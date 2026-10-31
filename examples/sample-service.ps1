@@ -1,4 +1,4 @@
-# Example service for LimitBar's services.json: prints a made-up usage report in the expected format.
+# Example service for Cooldown's services.json: prints a made-up usage report in the expected format.
 # A real script would ask the service for its numbers instead.
 $now = [DateTimeOffset]::UtcNow
 @{
