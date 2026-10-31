@@ -25,6 +25,8 @@ namespace LimitBar
         // No network yet (just after boot or waking), a timeout, or a file another app is in the middle
         // of writing: these clear up on their own, so they get another try well before ErrorBackoff.
         static readonly TimeSpan TransientRetry = TimeSpan.FromMinutes(1);
+        // Each Antigravity check starts agy, about 150 MB for several seconds, so it's asked at most this often.
+        static readonly Dictionary<string, TimeSpan> MinInterval = new Dictionary<string, TimeSpan> { ["antigravity"] = TimeSpan.FromMinutes(2) };
 
         readonly IUsageProvider[] _providers;
         readonly Dictionary<string, ServiceUsage> _latest = new Dictionary<string, ServiceUsage>();
@@ -59,6 +61,8 @@ namespace LimitBar
         }
 
         static TimeSpan Interval => TimeSpan.FromMinutes(Settings.RefreshMinutes);
+
+        static TimeSpan IntervalFor(string id) => MinInterval.TryGetValue(id, out var min) && min > Interval ? min : Interval;
 
         public IReadOnlyList<IUsageProvider> Providers => _providers;
 
@@ -131,7 +135,12 @@ namespace LimitBar
         {
             var updated = LastUpdated;
             if (updated.HasValue && DateTimeOffset.Now - updated.Value <= age) return;
-            foreach (var p in _providers) _due[p.Id] = DateTimeOffset.MinValue;
+            foreach (var p in _providers)
+            {
+                // A service's minimum gap holds here too.
+                if (MinInterval.TryGetValue(p.Id, out var min) && _lastAttempt.TryGetValue(p.Id, out var last) && DateTimeOffset.Now - last < min) continue;
+                _due[p.Id] = DateTimeOffset.MinValue;
+            }
             Tick();
         }
 
@@ -224,7 +233,7 @@ namespace LimitBar
                     _limitedInRow.Remove(provider.Id);
                     _pausedUntil.Remove(provider.Id);
                 }
-                var wait = result.Error == null ? Interval : transient ? TransientRetry : ErrorBackoff;
+                var wait = result.Error == null ? IntervalFor(provider.Id) : transient ? TransientRetry : ErrorBackoff;
                 _due[provider.Id] = NextDue(result, DateTimeOffset.Now, wait);
                 if (transient) _unreachable.Add(provider.Id);
                 else _unreachable.Remove(provider.Id);

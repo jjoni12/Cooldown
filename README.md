@@ -42,7 +42,7 @@ To update, quit LimitBar (**Settings → Quit LimitBar**) and unzip the new vers
 
 - Each service on the taskbar shows a logo, two bars and the time left until reset, like `5h 12m` or `1d 1h`.
 - A limit you haven't used yet shows its length dimmed (`5h`, `7d`), since its clock hasn't started.
-- Click the taskbar item to open the panel. The gear opens settings: services to show, Antigravity limit group, refresh interval, language and start with Windows.
+- Click the taskbar item to open the panel. The gear opens settings: services to show, Antigravity limit group, refresh interval, language and start with Windows. Antigravity is checked at most every 2 minutes, since each check starts the `agy` CLI.
 
 ## Privacy
 
