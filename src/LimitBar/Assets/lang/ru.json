@@ -31,7 +31,7 @@
   "CopilotPremium": "Премиум",
   "CopilotChat": "Чат",
   "CopilotCompletions": "Автодополнение",
-  "CopilotCredits": "Кредиты ИИ",
+  "CopilotCreditsUsed": "Использовано кредитов ИИ в этом месяце: {0}. GitHub не сообщает лимит тарифа",
   "ServerError": "Ошибка сервера {0} ({1})",
   "RateLimited": "Слишком много запросов к {0} (429). Скоро попробуем снова",
   "CommandTimedOut": "Команда {0} не завершилась вовремя",

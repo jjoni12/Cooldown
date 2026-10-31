@@ -112,7 +112,9 @@ namespace LimitBar
         public const string PremiumLabel = "premium";
         public const string ChatLabel = "chat";
         public const string CompletionsLabel = "completions";
-        public const string CreditsLabel = "credits";
+
+        public static string CopilotCreditsUsed(double credits) =>
+            Format(nameof(CopilotCreditsUsed), credits.ToString("0.#", CultureInfo.CurrentCulture));
 
         public static string WindowName(string label)
         {
@@ -126,7 +128,6 @@ namespace LimitBar
                 case PremiumLabel: return Get("CopilotPremium");
                 case ChatLabel: return Get("CopilotChat");
                 case CompletionsLabel: return Get("CopilotCompletions");
-                case CreditsLabel: return Get("CopilotCredits");
             }
             var match = Regex.Match(label, @"^(\d+)([dhm])$");
             if (!match.Success) return label;

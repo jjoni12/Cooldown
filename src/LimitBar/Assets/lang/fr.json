@@ -31,7 +31,7 @@
   "CopilotPremium": "Premium",
   "CopilotChat": "Chat",
   "CopilotCompletions": "Complétions",
-  "CopilotCredits": "Crédits IA",
+  "CopilotCreditsUsed": "{0} crédits IA utilisés ce mois-ci. GitHub n’indique pas la limite du forfait",
   "ServerError": "Erreur du serveur {0} ({1})",
   "RateLimited": "Trop de requêtes vers {0} (429). Nouvelle tentative sous peu",
   "CommandTimedOut": "La commande {0} ne s’est pas terminée à temps",

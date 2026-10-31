@@ -11,6 +11,7 @@ namespace LimitBar.Providers
     public sealed class CursorProvider : IUsageProvider
     {
         const string UsageUrl = "https://cursor.com/api/usage-summary";
+        const string WeeklyUrl = "https://cursor.com/api/dashboard/get-sand-usage-status";
 
         static readonly string Database = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Cursor", "User", "globalStorage", "state.vscdb");
@@ -26,15 +27,19 @@ namespace LimitBar.Providers
             var userId = string.IsNullOrEmpty(token) ? null : UserId(token);
             if (userId == null) throw new UsageException(Text.CursorSignIn);
 
-            var (status, body) = await Http.GetAsync(UsageUrl, new Dictionary<string, string>
+            var headers = new Dictionary<string, string>
             {
                 ["Cookie"] = $"WorkosCursorSessionToken={userId}%3A%3A{token}",
                 ["Origin"] = "https://cursor.com",
                 ["Referer"] = "https://cursor.com/dashboard",
                 ["Accept"] = "application/json",
-            }, ct);
+            };
+            var (status, body) = await Http.GetAsync(UsageUrl, headers, ct);
             if (status == 401 || status == 403) throw new UsageException(Text.CursorSignIn);
             if (status != 200) throw UsageException.Server(Name, status);
+
+            var weekly = await WeeklyPool(headers, ct);
+            if (weekly != null) return new ServiceUsage { Id = Id, Name = Name, Windows = { weekly } };
 
             var root = Json.Parse(body);
             var used = Json.Num(Json.Get(root, "individualUsage", "plan", "totalPercentUsed"))
@@ -44,18 +49,47 @@ namespace LimitBar.Providers
 
             var start = Json.Time(Json.Get(root, "billingCycleStart"));
             var end = Json.Time(Json.Get(root, "billingCycleEnd"));
-            var length = start.HasValue && end > start ? end.Value - start.Value : UsageWindow.MonthEndingAt(end);
             var usage = new ServiceUsage { Id = Id, Name = Name };
             usage.Windows.Add(new UsageWindow
             {
-                // Newer plans refill a weekly pool; older and free plans a monthly one.
-                Label = length.TotalDays < 10 ? "1w" : Text.MonthLabel,
-                Length = length,
+                Label = Text.MonthLabel,
+                Length = start.HasValue && end > start ? end.Value - start.Value : UsageWindow.MonthEndingAt(end),
                 UsedPercent = Math.Max(0, Math.Min(100, used.Value)),
                 ResetsAt = end,
                 FixedReset = true,
             });
             return usage;
+        }
+
+        // The unified Cursor + Grok plans spend one weekly pool, reported apart from the monthly billing cycle.
+        static async Task<UsageWindow> WeeklyPool(Dictionary<string, string> headers, CancellationToken ct)
+        {
+            try
+            {
+                var (status, body) = await Http.PostJsonAsync(WeeklyUrl, headers, "{}", ct);
+                return status == 200 ? ParseWeeklyPool(body) : null;
+            }
+            catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException || ex is System.Net.Http.HttpRequestException || ex is TaskCanceledException)
+            {
+                return null;
+            }
+        }
+
+        static UsageWindow ParseWeeklyPool(string body)
+        {
+            var root = Json.Parse(body);
+            var used = Json.Num(Json.Get(root, "usagePercent"));
+            var resetsAt = Json.Time(Json.Get(root, "nextResetTimestampUtc"));
+            if (!(Json.Get(root, "isUnified") is true) || Json.Get(root, "includedLimitZero") is true
+                || !used.HasValue || !(resetsAt > DateTimeOffset.Now)) return null;
+            return new UsageWindow
+            {
+                Label = "1w",
+                Length = TimeSpan.FromDays(7),
+                UsedPercent = Math.Max(0, Math.Min(100, used.Value)),
+                ResetsAt = resetsAt,
+                FixedReset = true,
+            };
         }
 
         static string UserId(string jwt)

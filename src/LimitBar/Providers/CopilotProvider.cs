@@ -58,15 +58,21 @@ namespace LimitBar.Providers
 
                 usage.Windows.Add(new UsageWindow
                 {
-                    // Since June 2026 paid plans spend AI credits instead of premium requests.
-                    Label = label == Text.PremiumLabel && Json.Get(root, "token_based_billing") is true ? Text.CreditsLabel : label,
+                    Label = label,
                     Length = UsageWindow.MonthEndingAt(resetsAt),
                     UsedPercent = Math.Max(0, Math.Min(100, 100 - remaining.Value)),
                     ResetsAt = resetsAt,
                     FixedReset = true,
                 });
             }
-            if (usage.Windows.Count == 0) throw new UsageException(Text.NoLimits);
+            if (usage.Windows.Count == 0)
+            {
+                // Plans billed in AI credits (since June 2026) get placeholder quotas, and GitHub
+                // publishes no credit allowance to measure against; report what was spent.
+                var credits = Json.Num(Json.Get(root, "quota_snapshots", "premium_interactions", "credits_used"));
+                if (credits.HasValue && Json.Get(root, "token_based_billing") is true) throw new UsageException(Text.CopilotCreditsUsed(credits.Value));
+                throw new UsageException(Text.NoLimits);
+            }
             return usage;
         }
     }

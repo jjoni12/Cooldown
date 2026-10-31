@@ -31,7 +31,7 @@
   "CopilotPremium": "Premium",
   "CopilotChat": "Chat",
   "CopilotCompletions": "Vervollständigung",
-  "CopilotCredits": "KI-Credits",
+  "CopilotCreditsUsed": "{0} KI-Credits in diesem Monat verbraucht. GitHub nennt kein Limit für den Tarif",
   "ServerError": "Serverfehler bei {0} ({1})",
   "RateLimited": "Zu viele Anfragen an {0} (429). Neuer Versuch in Kürze",
   "CommandTimedOut": "Der {0}-Befehl wurde nicht rechtzeitig beendet",

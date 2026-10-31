@@ -31,7 +31,7 @@
   "CopilotPremium": "高级",
   "CopilotChat": "聊天",
   "CopilotCompletions": "代码补全",
-  "CopilotCredits": "AI 积分",
+  "CopilotCreditsUsed": "本月已用 AI 积分 {0}。GitHub 未提供额度上限",
   "ServerError": "{0} 服务器错误 ({1})",
   "RateLimited": "对 {0} 的请求过多 (429)。稍后将重试",
   "CommandTimedOut": "{0} 命令未在规定时间内完成",
