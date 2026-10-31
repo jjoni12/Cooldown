@@ -98,7 +98,11 @@ namespace LimitBar
                     ["known"] = Known.ToArray(),
                 };
                 if (!string.IsNullOrEmpty(Language)) data["language"] = Language;
-                System.IO.File.WriteAllText(File, new JavaScriptSerializer().Serialize(data));
+                // Written beside and swapped in, so a crash or power loss mid-write can't leave half a file.
+                var temp = File + ".tmp";
+                System.IO.File.WriteAllText(temp, new JavaScriptSerializer().Serialize(data));
+                if (System.IO.File.Exists(File)) System.IO.File.Replace(temp, File, null);
+                else System.IO.File.Move(temp, File);
             }
             catch (Exception ex)
             {

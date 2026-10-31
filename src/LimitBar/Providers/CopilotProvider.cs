@@ -37,6 +37,7 @@ namespace LimitBar.Providers
                 var message = Json.Str(Json.Get(root, "message")) ?? "";
                 if (message.IndexOf("Not Found", StringComparison.OrdinalIgnoreCase) >= 0) throw new UsageException(Text.CopilotNone);
                 if (message.IndexOf("credentials", StringComparison.OrdinalIgnoreCase) >= 0) throw new UsageException(Text.GhSignIn);
+                if (result.Stderr.IndexOf("error connecting", StringComparison.OrdinalIgnoreCase) >= 0) throw new UsageException(Text.CantConnect(Name), transient: true);
                 throw new UsageException(Text.CommandBadOutput(Name));
             }
             return new ServiceUsage { Id = Id, Name = Name, Windows = ReadWindows(root) };

@@ -38,6 +38,7 @@
   "CodexCreditsLeft": "크레딧 {0} 남음 · OpenAI가 이 플랜의 한도를 알려주지 않아요",
   "ServerError": "{0} 서버 오류 ({1})",
   "RateLimited": "{0} 요청이 너무 많아요 (429). {1}에 다시 불러올게요",
+  "CantConnect": "{0}에 연결할 수 없어요. 곧 다시 시도할게요",
   "CommandTimedOut": "{0} 명령이 시간 안에 끝나지 않았어요",
   "CommandBadOutput": "{0} 명령의 출력을 읽지 못했어요",
   "Window5h": "5시간",

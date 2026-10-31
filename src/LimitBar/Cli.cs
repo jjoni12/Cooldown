@@ -16,6 +16,7 @@ namespace LimitBar
         {
             public int ExitCode;
             public string Stdout = "";
+            public string Stderr = "";
             public bool TimedOut;
         }
 
@@ -102,6 +103,7 @@ namespace LimitBar
                     {
                         ExitCode = p.ExitCode,
                         Stdout = stdout.Status == TaskStatus.RanToCompletion ? stdout.Result : "",
+                        Stderr = stderr.Status == TaskStatus.RanToCompletion ? stderr.Result : "",
                     };
                 }
             }, ct);

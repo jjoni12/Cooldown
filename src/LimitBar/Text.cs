@@ -105,6 +105,7 @@ namespace LimitBar
         public static string ServerError(string service, int status) => Format(nameof(ServerError), service, status);
         public static string RateLimited(string service, DateTimeOffset retryAt) =>
             Format(nameof(RateLimited), service, retryAt.LocalDateTime.ToString("t", CultureInfo.CurrentCulture));
+        public static string CantConnect(string service) => Format(nameof(CantConnect), service);
         public static string CommandTimedOut(string service) => Format(nameof(CommandTimedOut), service);
         public static string CommandBadOutput(string service) => Format(nameof(CommandBadOutput), service);
 

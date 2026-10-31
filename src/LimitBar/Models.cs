@@ -59,7 +59,10 @@ namespace LimitBar
 
     public sealed class UsageException : Exception
     {
-        public UsageException(string message) : base(message) { }
+        public UsageException(string message, bool transient = false) : base(message) => Transient = transient;
+
+        /// <summary>Likely to clear up on its own (no network yet), so worth another try soon.</summary>
+        public bool Transient { get; }
 
         public static UsageException Server(string service, int status) => new UsageException(Text.ServerError(service, status));
     }

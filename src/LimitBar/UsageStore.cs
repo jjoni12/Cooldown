@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
@@ -18,6 +22,9 @@ namespace LimitBar
         // answering 429, so a 1-minute refresh interval doesn't run into the limit every time.
         static readonly TimeSpan RateLimitPause = TimeSpan.FromMinutes(1);
         static readonly TimeSpan RepeatedRateLimitPause = TimeSpan.FromMinutes(2);
+        // No network yet (just after boot or waking), a timeout, or a file another app is in the middle
+        // of writing: these clear up on their own, so they get another try well before ErrorBackoff.
+        static readonly TimeSpan TransientRetry = TimeSpan.FromMinutes(1);
 
         readonly IUsageProvider[] _providers;
         readonly Dictionary<string, ServiceUsage> _latest = new Dictionary<string, ServiceUsage>();
@@ -26,6 +33,7 @@ namespace LimitBar
         readonly Dictionary<string, DateTimeOffset> _pausedUntil = new Dictionary<string, DateTimeOffset>();
         readonly Dictionary<string, int> _limitedInRow = new Dictionary<string, int>();
         readonly HashSet<string> _inFlight = new HashSet<string>();
+        readonly HashSet<string> _unreachable = new HashSet<string>(); // last try failed for a passing reason
         readonly CancellationTokenSource _cts = new CancellationTokenSource();
         DispatcherTimer _timer;
         DispatcherTimer _wake; // one-shot, for the moment a pause ends
@@ -87,6 +95,17 @@ namespace LimitBar
                     Tick();
                 }
             }));
+
+            // Back online: services that couldn't connect try again now instead of at their next turn.
+            NetworkChange.NetworkAvailabilityChanged += (s, e) =>
+            {
+                if (!e.IsAvailable) return;
+                dispatcher.BeginInvoke(new Action(() =>
+                {
+                    foreach (var id in _unreachable) _due[id] = DateTimeOffset.MinValue;
+                    if (_timer.IsEnabled) Tick();
+                }));
+            };
         }
 
         public void Stop()
@@ -136,6 +155,7 @@ namespace LimitBar
             _lastAttempt[provider.Id] = DateTimeOffset.Now;
             ServiceUsage result;
             DateTimeOffset? pausedUntil = null;
+            var transient = false;
             try
             {
                 result = await Task.Run(() => provider.FetchAsync(_cts.Token));
@@ -159,6 +179,19 @@ namespace LimitBar
             {
                 Log.Info(provider.Id, ex.Message);
                 result = new ServiceUsage { Id = provider.Id, Name = provider.Name, Error = ex.Message };
+                transient = ex.Transient;
+            }
+            catch (Exception ex) when (ex is HttpRequestException || ex is WebException || ex is OperationCanceledException)
+            {
+                Log.Info(provider.Id, $"{ex.GetType().Name}: {ex.Message}");
+                result = new ServiceUsage { Id = provider.Id, Name = provider.Name, Error = Text.CantConnect(provider.Name) };
+                transient = true;
+            }
+            catch (IOException ex)
+            {
+                Log.Info(provider.Id, $"{ex.GetType().Name}: {ex.Message}");
+                result = new ServiceUsage { Id = provider.Id, Name = provider.Name, Error = Text.FetchFailed };
+                transient = true;
             }
             catch (Exception ex)
             {
@@ -191,7 +224,10 @@ namespace LimitBar
                     _limitedInRow.Remove(provider.Id);
                     _pausedUntil.Remove(provider.Id);
                 }
-                _due[provider.Id] = NextDue(result, DateTimeOffset.Now, result.Error == null ? Interval : ErrorBackoff);
+                var wait = result.Error == null ? Interval : transient ? TransientRetry : ErrorBackoff;
+                _due[provider.Id] = NextDue(result, DateTimeOffset.Now, wait);
+                if (transient) _unreachable.Add(provider.Id);
+                else _unreachable.Remove(provider.Id);
             }
 
             Changed?.Invoke();

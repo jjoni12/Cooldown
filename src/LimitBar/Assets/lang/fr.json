@@ -38,6 +38,7 @@
   "CodexCreditsLeft": "{0} crédits restants. OpenAI n’indique pas les limites de ce forfait",
   "ServerError": "Erreur du serveur {0} ({1})",
   "RateLimited": "Trop de requêtes vers {0} (429). Nouvelle tentative à {1}",
+  "CantConnect": "Impossible de joindre {0}. Nouvel essai sous peu",
   "CommandTimedOut": "La commande {0} ne s’est pas terminée à temps",
   "CommandBadOutput": "Impossible de lire la sortie de la commande {0}",
   "Window5h": "5 heures",

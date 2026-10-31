@@ -38,6 +38,7 @@
   "CodexCreditsLeft": "剩余积分 {0}。OpenAI 未提供此方案的额度上限",
   "ServerError": "{0} 服务器错误 ({1})",
   "RateLimited": "对 {0} 的请求过多 (429)。将在 {1} 重试",
+  "CantConnect": "无法连接到 {0}，稍后将重试",
   "CommandTimedOut": "{0} 命令未在规定时间内完成",
   "CommandBadOutput": "无法读取 {0} 命令的输出",
   "Window5h": "5 小时",

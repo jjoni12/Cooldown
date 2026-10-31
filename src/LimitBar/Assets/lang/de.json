@@ -38,6 +38,7 @@
   "CodexCreditsLeft": "Noch {0} Credits. OpenAI nennt keine Limits für diesen Tarif",
   "ServerError": "Serverfehler bei {0} ({1})",
   "RateLimited": "Zu viele Anfragen an {0} (429). Neuer Versuch um {1}",
+  "CantConnect": "{0} ist nicht erreichbar. Neuer Versuch in Kürze",
   "CommandTimedOut": "Der {0}-Befehl wurde nicht rechtzeitig beendet",
   "CommandBadOutput": "Die Ausgabe des {0}-Befehls konnte nicht gelesen werden",
   "Window5h": "5 Stunden",

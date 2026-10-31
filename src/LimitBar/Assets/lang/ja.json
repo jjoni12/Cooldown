@@ -38,6 +38,7 @@
   "CodexCreditsLeft": "残りクレジット: {0}。OpenAI はこのプランの上限を公開していません",
   "ServerError": "{0} のサーバー エラー ({1})",
   "RateLimited": "{0} へのリクエストが多すぎます (429)。{1} に再試行します",
+  "CantConnect": "{0} に接続できません。まもなく再試行します",
   "CommandTimedOut": "{0} のコマンドが時間内に終了しませんでした",
   "CommandBadOutput": "{0} のコマンドの出力を読み取れませんでした",
   "Window5h": "5 時間",

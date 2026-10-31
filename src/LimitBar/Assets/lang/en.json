@@ -38,6 +38,7 @@
   "CodexCreditsLeft": "{0} credits left. OpenAI doesn't report usage limits for this plan",
   "ServerError": "{0} server error ({1})",
   "RateLimited": "Too many requests to {0} (429). Trying again at {1}",
+  "CantConnect": "Can't reach {0}. Trying again soon",
   "CommandTimedOut": "The {0} command didn't finish in time",
   "CommandBadOutput": "Couldn't read the output of the {0} command",
   "Window5h": "5-hour",

@@ -27,6 +27,8 @@ namespace LimitBar
                 Log.Error("ui", args.Exception);
                 args.Handled = true;
             };
+            // Off the UI thread an exception still ends the process; at least leave a trace of why.
+            AppDomain.CurrentDomain.UnhandledException += (s, args) => Log.Error("crash", args.ExceptionObject.ToString());
 
             Resources["TextFont"] = Visuals.UiFont;
             Text.Changed += () =>
