@@ -13,6 +13,8 @@
     <Version>0.1.1</Version>
     <Product>LimitBar</Product>
     <Description>AI coding tool usage limits on the Windows taskbar.</Description>
+    <!-- The exe records where its symbols were built; keeps the builder's folder and user name out of it. -->
+    <PathMap>$(MSBuildProjectDirectory)=LimitBar</PathMap>
   </PropertyGroup>
 
   <ItemGroup>
