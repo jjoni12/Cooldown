@@ -33,16 +33,29 @@ namespace LimitBar.Providers
             if (root == null || Json.Str(Json.Get(root, "status")) != "SUCCESS") throw new UsageException(Text.AgySignIn);
 
             var claudeGpt = Settings.AntigravityClaudeGpt;
-            var group = Json.Arr(Json.Get(root, "command", "data", "groups")).FirstOrDefault(g => claudeGpt ? IsClaudeGpt(g) : IsGemini(g));
-            if (group == null) throw new UsageException(Text.AgySignIn);
+            var windows = ReadWindows(root, claudeGpt);
+            if (windows == null) throw new UsageException(Text.AgySignIn);
+            return new ServiceUsage { Id = Id, Name = claudeGpt ? "Antigravity · Claude + GPT" : "Antigravity · Gemini", Windows = windows };
+        }
 
-            var usage = new ServiceUsage { Id = Id, Name = claudeGpt ? "Antigravity · Claude + GPT" : "Antigravity · Gemini" };
+        // Free (Starter) accounts get only the weekly limit; buckets without a remaining fraction are skipped.
+        static List<UsageWindow> ReadWindows(object root, bool claudeGpt)
+        {
+            var groups = Json.Arr(Json.Get(root, "command", "data", "groups")).ToList();
+            var prefix = claudeGpt ? "3p-" : "gemini-";
+            // The ordinary pool (gemini-5h / gemini-weekly) before versioned or model-specific groups.
+            var group = groups.FirstOrDefault(g => HasBucket(g, id => id == prefix + "5h" || id == prefix + "weekly"))
+                ?? groups.FirstOrDefault(g => (Json.Str(Json.Get(g, "name")) ?? "").IndexOf(claudeGpt ? "Claude" : "Gemini", StringComparison.OrdinalIgnoreCase) >= 0
+                    || HasBucket(g, id => id.StartsWith(prefix)));
+            if (group == null) return null;
+
+            var windows = new List<UsageWindow>();
             foreach (var bucket in Json.Arr(Json.Get(group, "buckets")))
             {
-                var length = WindowLength(Json.Str(Json.Get(bucket, "window")) ?? Json.Str(Json.Get(bucket, "id")));
+                var length = WindowLength(Json.Str(Json.Get(bucket, "window"))) ?? WindowLength(Json.Str(Json.Get(bucket, "id")));
                 var remaining = Json.Num(Json.Get(bucket, "remaining_fraction"));
                 if (!length.HasValue || !remaining.HasValue) continue;
-                usage.Windows.Add(new UsageWindow
+                windows.Add(new UsageWindow
                 {
                     Label = Text.WindowLabel(length.Value),
                     Length = length.Value,
@@ -50,26 +63,18 @@ namespace LimitBar.Providers
                     ResetsAt = Json.Time(Json.Get(bucket, "reset_time")),
                 });
             }
-            usage.Windows = usage.Windows.OrderBy(w => w.Length).ToList();
-            return usage;
+            return windows.OrderBy(w => w.Length).ToList();
         }
 
-        static bool IsGemini(object group) => GroupMatches(group, "Gemini", "gemini-");
-
-        static bool IsClaudeGpt(object group) => GroupMatches(group, "Claude", "3p-");
-
-        static bool GroupMatches(object group, string nameWord, string bucketPrefix)
-        {
-            var name = Json.Str(Json.Get(group, "name")) ?? "";
-            return name.IndexOf(nameWord, StringComparison.OrdinalIgnoreCase) >= 0
-                || Json.Arr(Json.Get(group, "buckets")).Any(b => (Json.Str(Json.Get(b, "id")) ?? "").StartsWith(bucketPrefix));
-        }
+        static bool HasBucket(object group, Func<string, bool> id) =>
+            Json.Arr(Json.Get(group, "buckets")).Any(b => id(Json.Str(Json.Get(b, "id")) ?? ""));
 
         static TimeSpan? WindowLength(string window)
         {
-            if (window == null) return null;
-            if (window.EndsWith("5h")) return TimeSpan.FromHours(5);
-            if (window.EndsWith("weekly")) return TimeSpan.FromDays(7);
+            if (string.IsNullOrEmpty(window)) return null;
+            var w = window.ToLowerInvariant();
+            if (w.EndsWith("5h") || w.Contains("five") || w.Contains("session")) return TimeSpan.FromHours(5);
+            if (w.EndsWith("weekly") || w.EndsWith("week") || w.EndsWith("7d")) return TimeSpan.FromDays(7);
             return null;
         }
     }

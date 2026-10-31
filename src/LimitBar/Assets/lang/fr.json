@@ -28,6 +28,7 @@
   "OpenCodeSessionExpired": "Votre connexion OpenCode a expiré. Ouvrez OpenCode une fois pour la renouveler",
   "OpenCodeNoGo": "Cet espace de travail n’a pas d’abonnement OpenCode Go",
   "NoLimits": "Ce forfait n’a pas de limites",
+  "LimitsUnavailable": "Aucune information de limite n’est disponible pour ce forfait",
   "CopilotPremium": "Premium",
   "CopilotChat": "Chat",
   "CopilotCompletions": "Complétions",

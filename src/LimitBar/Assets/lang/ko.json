@@ -28,6 +28,7 @@
   "OpenCodeSessionExpired": "OpenCode 로그인이 만료됐어요. OpenCode를 한 번 실행해 주세요",
   "OpenCodeNoGo": "이 워크스페이스에는 OpenCode Go 구독이 없어요",
   "NoLimits": "한도가 없는 플랜이에요",
+  "LimitsUnavailable": "이 플랜은 한도 정보를 받을 수 없어요",
   "CopilotPremium": "프리미엄",
   "CopilotChat": "채팅",
   "CopilotCompletions": "코드 완성",

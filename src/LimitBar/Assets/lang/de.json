@@ -28,6 +28,7 @@
   "OpenCodeSessionExpired": "Die OpenCode-Anmeldung ist abgelaufen. OpenCode einmal öffnen, um sie zu erneuern",
   "OpenCodeNoGo": "Dieser Arbeitsbereich hat kein OpenCode-Go-Abo",
   "NoLimits": "Dieser Tarif hat keine Limits",
+  "LimitsUnavailable": "Für diesen Tarif sind keine Limit-Informationen verfügbar",
   "CopilotPremium": "Premium",
   "CopilotChat": "Chat",
   "CopilotCompletions": "Vervollständigung",

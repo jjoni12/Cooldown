@@ -28,6 +28,7 @@
   "OpenCodeSessionExpired": "Your OpenCode sign-in expired. Open OpenCode once to renew it",
   "OpenCodeNoGo": "This workspace has no OpenCode Go subscription",
   "NoLimits": "This plan has no limits",
+  "LimitsUnavailable": "No limit information is available for this plan",
   "CopilotPremium": "Premium",
   "CopilotChat": "Chat",
   "CopilotCompletions": "Completions",

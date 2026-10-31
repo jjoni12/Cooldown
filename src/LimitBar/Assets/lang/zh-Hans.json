@@ -28,6 +28,7 @@
   "OpenCodeSessionExpired": "OpenCode 登录已过期。请打开一次 OpenCode",
   "OpenCodeNoGo": "此工作区没有 OpenCode Go 订阅",
   "NoLimits": "此方案没有额度限制",
+  "LimitsUnavailable": "此方案无法获取额度信息",
   "CopilotPremium": "高级",
   "CopilotChat": "聊天",
   "CopilotCompletions": "代码补全",

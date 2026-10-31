@@ -140,6 +140,8 @@ namespace LimitBar
             {
                 result = await Task.Run(() => provider.FetchAsync(_cts.Token));
                 result.FetchedAt = DateTimeOffset.Now;
+                // An answer with no limits at all (Claude Free, say) would otherwise stay on "Loading…".
+                if (result.Windows.Count == 0 && result.Error == null) result.Error = Text.LimitsUnavailable;
             }
             catch (RateLimitedException ex)
             {

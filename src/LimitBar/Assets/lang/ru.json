@@ -28,6 +28,7 @@
   "OpenCodeSessionExpired": "Срок входа в OpenCode истёк. Откройте OpenCode один раз, чтобы обновить его",
   "OpenCodeNoGo": "В этой рабочей области нет подписки OpenCode Go",
   "NoLimits": "В этом тарифе нет лимитов",
+  "LimitsUnavailable": "Для этого тарифа нет данных о лимитах",
   "CopilotPremium": "Премиум",
   "CopilotChat": "Чат",
   "CopilotCompletions": "Автодополнение",

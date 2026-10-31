@@ -28,6 +28,7 @@
   "OpenCodeSessionExpired": "Tu sesión de OpenCode caducó. Abre OpenCode una vez para renovarla",
   "OpenCodeNoGo": "Este espacio de trabajo no tiene una suscripción a OpenCode Go",
   "NoLimits": "Este plan no tiene límites",
+  "LimitsUnavailable": "No hay información de límites para este plan",
   "CopilotPremium": "Premium",
   "CopilotChat": "Chat",
   "CopilotCompletions": "Autocompletado",

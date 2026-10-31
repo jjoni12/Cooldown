@@ -98,6 +98,7 @@ namespace LimitBar
         public static string OpenCodeSessionExpired => Get(nameof(OpenCodeSessionExpired));
         public static string OpenCodeNoGo => Get(nameof(OpenCodeNoGo));
         public static string NoLimits => Get(nameof(NoLimits));
+        public static string LimitsUnavailable => Get(nameof(LimitsUnavailable));
 
         public static string Minutes(int n) => Format(nameof(Minutes), n);
         public static string ServerError(string service, int status) => Format(nameof(ServerError), service, status);

@@ -28,6 +28,7 @@
   "OpenCodeSessionExpired": "OpenCode のサインインの有効期限が切れました。OpenCode を一度起動してください",
   "OpenCodeNoGo": "このワークスペースには OpenCode Go のサブスクリプションがありません",
   "NoLimits": "このプランには上限がありません",
+  "LimitsUnavailable": "このプランでは上限の情報を取得できません",
   "CopilotPremium": "プレミアム",
   "CopilotChat": "チャット",
   "CopilotCompletions": "コード補完",
