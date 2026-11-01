@@ -13,6 +13,8 @@ namespace Cooldown
 
         public static object Parse(string text) => Serializer.DeserializeObject(text);
 
+        public static string Write(object value) => Serializer.Serialize(value);
+
         public static object Get(object node, params string[] path)
         {
             foreach (var key in path)

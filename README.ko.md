@@ -33,7 +33,7 @@ PC에서 찾은 서비스가 먼저 표시되고, 나머지는 **설정**에서 
 1. [Releases](https://github.com/jjoni12/Cooldown/releases)에서 `Cooldown.zip`을 받습니다.
 2. 계속 둘 폴더에 압축을 풉니다. 예: `%LOCALAPPDATA%\Programs\Cooldown`
 3. `Cooldown.exe`를 실행합니다. 코드 서명이 없어서 처음에 SmartScreen 경고가 뜰 수 있습니다. **추가 정보 → 실행**을 누르세요.
-4. 윈도우와 함께 켜지게 하려면 패널의 **설정**에서 **Windows 시작 시 실행**을 켭니다.
+4. 윈도우와 함께 켜지게 하려면 패널의 **설정**에서 **Windows 시작 시 실행**을 켭니다. 작업 스케줄러에 로그인 시 실행 작업이 추가돼서 로그인하자마자 켜집니다. Cooldown 폴더를 지우기 전에 이 설정을 꺼 주세요.
 
 윈도우 11이 필요합니다. 윈도우에 기본으로 들어 있는 .NET Framework 4.8로 돌아가서 따로 설치할 것은 없습니다.
 
@@ -51,12 +51,14 @@ PC에서 찾은 서비스가 먼저 표시되고, 나머지는 **설정**에서 
 
 Cooldown에는 계정이 없고 비밀번호를 묻지 않습니다. 각 도구가 이미 PC에 저장해 둔 로그인을 읽어서, 사용량을 물어볼 때 그 서비스의 서버로만 보냅니다. 따로 저장하거나 기록하거나 다른 곳으로 보내지 않습니다.
 
+Cooldown이 쓰는 로그인은 Claude Code 것 하나뿐입니다. 만료되면 Claude Code와 같은 방식으로 갱신해서 Claude Code의 로그인 파일에 다시 저장하므로 둘 다 그대로 동작합니다.
+
 <details>
 <summary>각 숫자를 어디서 가져오나요</summary>
 
 | 서비스 | 출처 |
 |---|---|
-| Claude | Claude Code 로그인 → `api.anthropic.com/api/oauth/usage` (Claude Code `/usage`와 같은 데이터) |
+| Claude | Claude Code 로그인 → `api.anthropic.com/api/oauth/usage` (Claude Code `/usage`와 같은 데이터). 만료된 로그인은 Claude Code처럼 `platform.claude.com/v1/oauth/token`에서 갱신합니다 |
 | GPT | Codex CLI 로그인 → `chatgpt.com/backend-api/wham/usage` (Codex CLI가 묻는 방식 그대로) |
 | Cursor | Cursor에 저장된 로그인(읽기 전용) → `cursor.com/api/usage-summary` (cursor.com 대시보드가 묻는 방식 그대로) |
 | GitHub Copilot | `gh api /copilot_internal/user`. 요청은 GitHub CLI가 보내서 Cooldown은 GitHub 토큰을 다루지 않습니다 |

@@ -33,7 +33,7 @@ Cooldown shows the services it finds on your PC; turn others on or off in **Sett
 1. Download `Cooldown.zip` from [Releases](https://github.com/jjoni12/Cooldown/releases).
 2. Unzip it into a folder you'll keep, such as `%LOCALAPPDATA%\Programs\Cooldown`.
 3. Run `Cooldown.exe`. The app isn't code-signed, so Windows may show a SmartScreen warning the first time: choose **More info → Run anyway**.
-4. To have it start with Windows, open the panel's **Settings** and turn on **Start with Windows**.
+4. To have it start with Windows, open the panel's **Settings** and turn on **Start with Windows**. This adds a sign-in task to Task Scheduler, so Cooldown starts as soon as you sign in. Turn it off before you delete Cooldown's folder.
 
 Requires Windows 11. Nothing else to install: it runs on .NET Framework 4.8, which comes with Windows.
 
@@ -51,12 +51,14 @@ To update, quit Cooldown (**Settings → Quit Cooldown**) and unzip the new vers
 
 Cooldown has no account and never asks for a password. It reads the sign-in that each tool has already saved on your PC, and sends it only to that service's own server to ask for your usage. Nothing is stored, logged or sent anywhere else.
 
+The one sign-in Cooldown writes is Claude Code's: once it has expired, Cooldown renews it the way Claude Code does and saves it back to Claude Code's own file, so both keep working.
+
 <details>
 <summary>Where each number comes from</summary>
 
 | Service | Source |
 |---|---|
-| Claude | Claude Code's sign-in → `api.anthropic.com/api/oauth/usage`, the data behind Claude Code's `/usage` |
+| Claude | Claude Code's sign-in → `api.anthropic.com/api/oauth/usage`, the data behind Claude Code's `/usage`. An expired sign-in is renewed at `platform.claude.com/v1/oauth/token`, as Claude Code renews it |
 | GPT | Codex CLI's sign-in → `chatgpt.com/backend-api/wham/usage`, as the Codex CLI asks it |
 | Cursor | Cursor's saved sign-in (read-only) → `cursor.com/api/usage-summary`, as the cursor.com dashboard asks it |
 | GitHub Copilot | `gh api /copilot_internal/user`; the GitHub CLI signs the request, so Cooldown never handles your GitHub token |

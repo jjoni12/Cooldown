@@ -57,6 +57,7 @@ namespace Cooldown
             flyout.Park();
             chip.Start();
             _store.Start();
+            System.Threading.Tasks.Task.Run(() => Cooldown.Startup.MoveFromRunKey());
             Memory.TrimSoon(TimeSpan.FromSeconds(20));
         }
 

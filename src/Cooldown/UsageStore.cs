@@ -118,13 +118,15 @@ namespace Cooldown
             _cts.Cancel();
         }
 
-        /// <summary>The refresh button: the user asked, so this goes through even a rate-limit pause.</summary>
+        /// <summary>
+        /// The refresh button. A service paused after a 429 stays paused: asking again only extends the
+        /// limit, and pressing it a few times in a row once kept Claude at 429 for an hour.
+        /// </summary>
         public void RefreshAll()
         {
             foreach (var p in _providers)
             {
                 _due[p.Id] = DateTimeOffset.MinValue;
-                _pausedUntil.Remove(p.Id);
                 _lastAttempt.Remove(p.Id);
             }
             Tick();

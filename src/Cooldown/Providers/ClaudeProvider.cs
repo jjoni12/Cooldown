@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,37 +11,19 @@ namespace Cooldown.Providers
 
         public string Id => "claude";
         public string Name => "Claude";
-        public bool IsSetUp => File.Exists(Path.Combine(ConfigDir, ".credentials.json")) || FindClaude() != null;
-
-        static string FindClaude() => Cli.Find("claude", @"%USERPROFILE%\.local\bin\claude.exe", @"%APPDATA%\npm\claude.cmd");
-
-        static string ConfigDir
-        {
-            get
-            {
-                var custom = Environment.GetEnvironmentVariable("CLAUDE_CONFIG_DIR");
-                return string.IsNullOrWhiteSpace(custom)
-                    ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".claude")
-                    : custom;
-            }
-        }
+        public bool IsSetUp => ClaudeLogin.Exists || Cli.Find("claude", @"%USERPROFILE%\.local\bin\claude.exe", @"%APPDATA%\npm\claude.cmd") != null;
 
         public async Task<ServiceUsage> FetchAsync(CancellationToken ct)
         {
-            var token = ReadToken(out var expiresAt);
-            if (token == null || expiresAt < DateTimeOffset.Now.AddMinutes(2))
-            {
-                await LetClaudeCodeRefresh(ct);
-                token = ReadToken(out _);
-            }
-            if (token == null) throw new UsageException(Text.ClaudeSignIn);
+            var login = ClaudeLogin.Read() ?? throw new UsageException(Text.ClaudeSignIn);
+            // An expired sign-in is never sent: the endpoint answers 401, and asked again, 429 for up to an hour.
+            if (login.ExpiresSoon) login = await login.RenewAsync(ct) ?? throw new UsageException(Text.ClaudeSignIn);
 
-            var (status, body) = await Request(token, ct);
+            var (status, body) = await Request(login.AccessToken, ct);
             if (status == 401)
             {
-                await LetClaudeCodeRefresh(ct);
-                token = ReadToken(out _);
-                if (token != null) (status, body) = await Request(token, ct);
+                login = await login.RenewAsync(ct) ?? throw new UsageException(Text.ClaudeSignIn);
+                (status, body) = await Request(login.AccessToken, ct);
             }
             if (status == 401) throw new UsageException(Text.ClaudeSignIn);
             if (status != 200) throw UsageException.Server(Name, status);
@@ -100,25 +81,5 @@ namespace Cooldown.Providers
                 ["Authorization"] = "Bearer " + token,
                 ["anthropic-beta"] = "oauth-2025-04-20",
             }, ct);
-
-        static string ReadToken(out DateTimeOffset expiresAt)
-        {
-            expiresAt = DateTimeOffset.MinValue;
-            var file = Path.Combine(ConfigDir, ".credentials.json");
-            if (!File.Exists(file)) return null;
-            var oauth = Json.Get(Json.Parse(File.ReadAllText(file)), "claudeAiOauth");
-            var expires = Json.Num(Json.Get(oauth, "expiresAt"));
-            if (expires.HasValue) expiresAt = DateTimeOffset.FromUnixTimeMilliseconds((long)expires.Value);
-            return Json.Str(Json.Get(oauth, "accessToken"));
-        }
-
-        // Tokens are never refreshed here: `claude auth status` makes Claude Code refresh and save its own.
-        static async Task LetClaudeCodeRefresh(CancellationToken ct)
-        {
-            var exe = FindClaude();
-            if (exe == null) return;
-            var result = await Cli.RunAsync(exe, "auth status", TimeSpan.FromSeconds(45), ct: ct);
-            if (result.TimedOut) Log.Info("claude", "`claude auth status` timed out");
-        }
     }
 }
