@@ -39,8 +39,6 @@ Requires Windows 11. Nothing else to install: it runs on .NET Framework 4.8, whi
 
 To update, quit Cooldown (**Settings → Quit Cooldown**) and unzip the new version over the old one.
 
-**Coming from LimitBar** (its name before 0.2.0): just run Cooldown. It closes LimitBar, copies its settings and takes over **Start with Windows**; then you can delete the old LimitBar folder.
-
 ## Using it
 
 - Each service on the taskbar shows a logo, two bars and the time left until reset, like `5h 12m` or `1d 1h`. To see how much you've used instead, like `42%`, set **Settings → On the taskbar** to **Usage**.
