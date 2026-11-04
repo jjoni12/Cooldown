@@ -171,7 +171,10 @@ namespace Cooldown
         }
 
         static string Describe(ServiceUsage usage) =>
-            usage.Id + ";" + usage.Name + ";" + usage.Error + ";" + string.Join(",", usage.ChipWindows.Select(w => $"{Math.Round(w.EffectivePercent, 1)}/{w.TimeText}/{w.IsIdle}"));
+            usage.Id + ";" + usage.Name + ";" + usage.Error + ";" + string.Join(",", usage.ChipWindows.Select(w => $"{Math.Round(w.EffectivePercent, 1)}/{ChipText(w)}/{w.IsIdle}"));
+
+        static string ChipText(UsageWindow w) =>
+            Settings.ChipShowsUsage ? $"{Math.Round(w.EffectivePercent):0}%" : w.TimeText;
 
         static FrameworkElement BuildService(ServiceUsage usage, Palette palette, double leftMargin)
         {
@@ -203,7 +206,7 @@ namespace Cooldown
                 for (var r = 0; r < windows.Count; r++)
                 {
                     var w = windows[r];
-                    AddRow(grid, r, windows.Count == 1 ? 2 : 1, w.EffectivePercent, w.TimeText,
+                    AddRow(grid, r, windows.Count == 1 ? 2 : 1, w.EffectivePercent, ChipText(w),
                         w.IsIdle ? palette.TextSecondary : palette.Text, palette);
                 }
             }

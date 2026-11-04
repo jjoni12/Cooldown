@@ -81,6 +81,9 @@ namespace Cooldown
         public static string General => Get(nameof(General));
         public static string AntigravityGroup => Get(nameof(AntigravityGroup));
         public static string RefreshInterval => Get(nameof(RefreshInterval));
+        public static string ChipShows => Get(nameof(ChipShows));
+        public static string ShowTimeLeft => Get(nameof(ShowTimeLeft));
+        public static string ShowUsage => Get(nameof(ShowUsage));
         public static string Loading => Get(nameof(Loading));
         public static string FetchFailed => Get(nameof(FetchFailed));
 

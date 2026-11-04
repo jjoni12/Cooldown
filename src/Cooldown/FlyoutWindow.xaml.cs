@@ -33,6 +33,7 @@ namespace Cooldown
         readonly Dictionary<string, ToggleVisual> _serviceToggles = new Dictionary<string, ToggleVisual>();
         ToggleVisual _startupToggle;
         Drawer _groupDrawer;
+        Drawer _chipDrawer;
         Choice _intervalChoice;
         Choice _languageChoice;
         IntPtr _hwnd;
@@ -121,6 +122,11 @@ namespace Cooldown
             _groupDrawer.Selected += i => Settings.SetAntigravityClaudeGpt(i == 1);
             SettingsBody.Children.Add(_groupDrawer.Root);
 
+            _chipDrawer = new Drawer(Text.ChipShows, new[] { Text.ShowTimeLeft, Text.ShowUsage },
+                Settings.ChipShowsUsage ? 1 : 0, palette, rowStyle);
+            _chipDrawer.Selected += i => Settings.SetChipShowsUsage(i == 1);
+            SettingsBody.Children.Add(_chipDrawer.Root);
+
             Func<double> overlayBottom = () => Root.ActualHeight - ShadowRoom + Gap;
             _intervalChoice = new Choice(Text.RefreshInterval, Settings.RefreshChoices.Select(Text.Minutes).ToArray(),
                 Array.IndexOf(Settings.RefreshChoices, Settings.RefreshMinutes), palette, Overlay, overlayBottom);
@@ -150,6 +156,7 @@ namespace Cooldown
         {
             foreach (var pair in _serviceToggles) pair.Value.SetOn(Settings.IsShown(pair.Key), animate: true);
             _groupDrawer.SetSelected(Settings.AntigravityClaudeGpt ? 1 : 0);
+            _chipDrawer.SetSelected(Settings.ChipShowsUsage ? 1 : 0);
             _intervalChoice.SetSelected(Array.IndexOf(Settings.RefreshChoices, Settings.RefreshMinutes));
         }
 

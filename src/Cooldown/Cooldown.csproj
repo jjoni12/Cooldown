@@ -10,7 +10,7 @@
     <AssemblyName>Cooldown</AssemblyName>
     <RootNamespace>Cooldown</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.2.1</Version>
+    <Version>0.2.2</Version>
     <Product>Cooldown</Product>
     <Description>AI coding tool usage limits on the Windows taskbar.</Description>
     <!-- The exe records where its symbols were built; keeps the builder's folder and user name out of it. -->

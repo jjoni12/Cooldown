@@ -20,6 +20,9 @@ namespace Cooldown
 
         public static bool AntigravityClaudeGpt { get; private set; }
 
+        /// <summary>The taskbar shows how much of each limit is used instead of the time until it resets.</summary>
+        public static bool ChipShowsUsage { get; private set; }
+
         public static string Language { get; private set; }
 
         public static event Action Changed;
@@ -79,6 +82,13 @@ namespace Cooldown
             SaveAndNotify();
         }
 
+        public static void SetChipShowsUsage(bool usage)
+        {
+            if (usage == ChipShowsUsage) return;
+            ChipShowsUsage = usage;
+            SaveAndNotify();
+        }
+
         static void SaveAndNotify()
         {
             Save();
@@ -94,6 +104,7 @@ namespace Cooldown
                 {
                     ["refreshMinutes"] = RefreshMinutes,
                     ["antigravityGroup"] = AntigravityClaudeGpt ? "claude-gpt" : "gemini",
+                    ["taskbarText"] = ChipShowsUsage ? "usage" : "time-left",
                     ["hidden"] = Hidden.ToArray(),
                     ["known"] = Known.ToArray(),
                 };
@@ -119,6 +130,7 @@ namespace Cooldown
                 var minutes = Json.Num(Json.Get(root, "refreshMinutes"));
                 if (minutes.HasValue && RefreshChoices.Contains((int)minutes.Value)) RefreshMinutes = (int)minutes.Value;
                 AntigravityClaudeGpt = Json.Str(Json.Get(root, "antigravityGroup")) == "claude-gpt";
+                ChipShowsUsage = Json.Str(Json.Get(root, "taskbarText")) == "usage";
                 Language = Json.Str(Json.Get(root, "language"));
                 foreach (var id in Json.Arr(Json.Get(root, "hidden")).OfType<string>()) Hidden.Add(id);
                 foreach (var id in Json.Arr(Json.Get(root, "known")).OfType<string>()) Known.Add(id);
