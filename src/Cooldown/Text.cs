@@ -50,7 +50,6 @@ namespace Cooldown
             Language = language;
         }
 
-        /// <summary>Built-in languages and language files in %APPDATA%\Cooldown\lang, by their own names.</summary>
         public static IReadOnlyList<(string Code, string Name)> Available()
         {
             var codes = Assembly.GetExecutingAssembly().GetManifestResourceNames()
