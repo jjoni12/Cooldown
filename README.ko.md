@@ -18,7 +18,7 @@ AI 코딩 도구 사용 한도를 윈도우 11 작업 표시줄에서 바로 확
 
 | 서비스 | 표시하는 한도 | 필요한 것 |
 |---|---|---|
-| Claude | 5시간, 주간, 모델별 주간 | [Claude Code](https://code.claude.com) 로그인 (유료 플랜. 무료 플랜에는 Claude Code가 없습니다) |
+| Claude | 5시간, 주간, 모델별 주간 | [Claude Code](https://code.claude.com) 로그인 (`claude auth login`. 유료 플랜만 되고, 무료 플랜에는 Claude Code가 없습니다) |
 | GPT (Codex) | 5시간, 주간 (무료는 30일), Spark·워크스페이스 크레딧 한도 | [Codex CLI](https://github.com/openai/codex) 로그인 |
 | Cursor | 주간 또는 월간 (플랜에 따라) | Cursor 앱 로그인 |
 | GitHub Copilot | 월간 | [GitHub CLI](https://cli.github.com) 로그인 (`gh auth login`) |

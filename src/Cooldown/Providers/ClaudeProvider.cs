@@ -17,15 +17,15 @@ namespace Cooldown.Providers
         {
             var login = ClaudeLogin.Read() ?? throw new UsageException(Text.ClaudeSignIn);
             // An expired sign-in is never sent: the endpoint answers 401, and asked again, 429 for up to an hour.
-            if (login.ExpiresSoon) login = await login.RenewAsync(ct) ?? throw new UsageException(Text.ClaudeSignIn);
+            if (login.ExpiresSoon) login = await login.RenewAsync(ct) ?? throw SignInEnded();
 
             var (status, body) = await Request(login.AccessToken, ct);
             if (status == 401)
             {
-                login = await login.RenewAsync(ct) ?? throw new UsageException(Text.ClaudeSignIn);
+                login = await login.RenewAsync(ct) ?? throw SignInEnded();
                 (status, body) = await Request(login.AccessToken, ct);
             }
-            if (status == 401) throw new UsageException(Text.ClaudeSignIn);
+            if (status == 401) throw SignInEnded();
             if (status != 200) throw UsageException.Server(Name, status);
 
             var root = Json.Parse(body);
@@ -61,6 +61,10 @@ namespace Cooldown.Providers
             }
             return usage;
         }
+
+        // A sign-in that can't be renewed any more: it expired, or a plan change revoked it.
+        static UsageException SignInEnded() =>
+            new UsageException(ClaudeLogin.Read() == null ? Text.ClaudeSignIn : Text.ClaudeExpired);
 
         static void AddWindow(ServiceUsage usage, object root, string key, TimeSpan length)
         {

@@ -88,6 +88,7 @@ namespace Cooldown
         public static string FetchFailed => Get(nameof(FetchFailed));
 
         public static string ClaudeSignIn => Get(nameof(ClaudeSignIn));
+        public static string ClaudeExpired => Get(nameof(ClaudeExpired));
         public static string CodexSignIn => Get(nameof(CodexSignIn));
         public static string AgyMissing => Get(nameof(AgyMissing));
         public static string AgySignIn => Get(nameof(AgySignIn));
