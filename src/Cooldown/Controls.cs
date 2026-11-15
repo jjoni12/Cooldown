@@ -411,7 +411,6 @@ namespace Cooldown
             }
             if (height < full) scroller.ScrollToVerticalOffset(Math.Max(0, rowTop - (origin.Y - top)));
 
-            // Opens out of the chosen row, as WinUI's drop-down does.
             var reveal = new RectangleGeometry(new Rect(0, Math.Max(0, origin.Y - top), width, Item + 4));
             list.Clip = reveal;
             var grow = new RectAnimationUsingKeyFrames();

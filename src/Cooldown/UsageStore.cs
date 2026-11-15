@@ -16,7 +16,7 @@ namespace Cooldown
     {
         static readonly TimeSpan ErrorBackoff = TimeSpan.FromMinutes(15);
         static readonly TimeSpan AfterReset = TimeSpan.FromSeconds(30);
-        // The Claude endpoint answers 429 when asked too often.
+        // Some endpoints (Claude's) answer 429 when asked too often.
         static readonly TimeSpan MinGap = TimeSpan.FromSeconds(30);
         // After a 429 a service is left alone this long (or as long as it asks); longer if it keeps
         // answering 429, so a 1-minute refresh interval doesn't run into the limit every time.
@@ -25,7 +25,7 @@ namespace Cooldown
         // No network yet (just after boot or waking), a timeout, or a file another app is in the middle
         // of writing: these clear up on their own, so they get another try well before ErrorBackoff.
         static readonly TimeSpan TransientRetry = TimeSpan.FromMinutes(1);
-        // Each Antigravity check starts agy, about 150 MB for several seconds, so it's asked at most this often.
+        // Each Antigravity check starts agy, about 150 MB for several seconds, so it's asked at most this often (the refresh button aside).
         static readonly Dictionary<string, TimeSpan> MinInterval = new Dictionary<string, TimeSpan> { ["antigravity"] = TimeSpan.FromMinutes(2) };
 
         readonly IUsageProvider[] _providers;
@@ -38,7 +38,7 @@ namespace Cooldown
         readonly HashSet<string> _unreachable = new HashSet<string>(); // last try failed for a passing reason
         readonly CancellationTokenSource _cts = new CancellationTokenSource();
         DispatcherTimer _timer;
-        DispatcherTimer _wake; // one-shot, for the moment a pause ends
+        DispatcherTimer _wake;
         DateTimeOffset _wakeAt;
         bool _antigravityClaudeGpt = Settings.AntigravityClaudeGpt;
 
@@ -139,7 +139,6 @@ namespace Cooldown
             if (updated.HasValue && DateTimeOffset.Now - updated.Value <= age) return;
             foreach (var p in _providers)
             {
-                // A service's minimum gap holds here too.
                 if (MinInterval.TryGetValue(p.Id, out var min) && _lastAttempt.TryGetValue(p.Id, out var last) && DateTimeOffset.Now - last < min) continue;
                 _due[p.Id] = DateTimeOffset.MinValue;
             }
@@ -246,7 +245,7 @@ namespace Cooldown
 
         void WakeAt(DateTimeOffset at)
         {
-            if (_wake == null || (_wake.IsEnabled && _wakeAt <= at)) return; // an earlier wake is already set
+            if (_wake == null || (_wake.IsEnabled && _wakeAt <= at)) return;
             var wait = at - DateTimeOffset.Now;
             _wake.Stop();
             _wake.Interval = wait > TimeSpan.FromSeconds(1) ? wait : TimeSpan.FromSeconds(1);

@@ -67,7 +67,6 @@ namespace Cooldown
         public static UsageException Server(string service, int status) => new UsageException(Text.ServerError(service, status));
     }
 
-    /// <summary>The service answered 429; RetryAfter is how long it asked us to wait, if it said.</summary>
     public sealed class RateLimitedException : Exception
     {
         public RateLimitedException(TimeSpan? retryAfter) : base("429") => RetryAfter = retryAfter;
